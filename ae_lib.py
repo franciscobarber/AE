@@ -171,8 +171,8 @@ class myautoencoder():
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
     total_specs=0 
-    file_names = [f for f in listdir(audio_dir) if isfile(join(audio_dir, f)) and '.wav' in f]
     audio_dir='/content/free-spoken-digit-dataset/recordings/'
+    file_names = [f for f in listdir(audio_dir) if isfile(join(audio_dir, f)) and '.wav' in f]
     for i in range(num_audios):
       
       audio_path = audio_dir + file_names[files_permutation[i]]
