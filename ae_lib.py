@@ -25,7 +25,7 @@ from keras.models import model_from_json
 class myautoencoder():
   def __init__(self,compression_rate,spec, x_train, x_test, mode = 'conv', random_encoder = False, pretrain_encoder = False, encoder_w=None, std = 0, log_ref=1e-5):
     self.mode = mode
-    self.time_long = int(time_long)
+    self.time_long = int(spec.time_long)
     #modif
     self.x_train = x_train
     self.x_test = x_test
