@@ -10,6 +10,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from AE.spec_lib import pretty_spectrogram
+import librosa
+import librosa.display 
 import scipy.io.wavfile as wav
 from os import listdir
 from os.path import isfile, join
