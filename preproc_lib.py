@@ -32,3 +32,11 @@ def create_specs(fft, time_long, step_size, log_ref):
   print(np.amax(ms_list))  
   return  train_test_split(
     ms_list, test_size=0.20, random_state=42)
+class specData():
+  def __init__(self,fft,time_long,fft_step_size_ratio,clip=1e0):
+    self.fft= fft
+    self.time_long = time_long
+    self.fft_step_size_ratio = fft_step_size_ratio
+    self.clip = clip
+  def set_clip(self,clip):
+    self.clip = clip
