@@ -7,7 +7,7 @@ import numpy as np
 import time
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from spec_lib import pretty_spectrogram
+from AE.spec_lib import pretty_spectrogram
 def create_specs(fft, time_long, step_size, log_ref):
   audio_dir='/content/free-spoken-digit-dataset/recordings/'
   file_names = [f for f in listdir(audio_dir) if isfile(join(audio_dir, f)) and '.wav' in f]
