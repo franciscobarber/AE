@@ -145,21 +145,21 @@ class myautoencoder():
 #g = autoencoder
       g2_json = self.autoencoder.to_json()
 
-      with open("/gdrive/My Drive/NN/"+files_name+".json", "w") as json_file:
+      with open(files_name+".json", "w") as json_file:
           json_file.write(g2_json)
 # serialize weights to HDF5
-      self.autoencoder.save_weights("/gdrive/My Drive/NN/"+files_name+".h5")
+      self.autoencoder.save_weights(files_name+".h5")
       print("Saved autoencoder model  to disk")
 
   def load_autoencoder(self,files_name):
       
       # load json and create model
-      json_file = open("/gdrive/My Drive/NN/"+files_name+".json", 'r')
+      json_file = open(files_name+".json", 'r')
       loaded_model_json = json_file.read()
       json_file.close()
       self.autoencoder = model_from_json(loaded_model_json)
       # load weights into new model
-      self.autoencoder.load_weights("/gdrive/My Drive/NN/"+files_name+".h5")
+      self.autoencoder.load_weights(files_name+".h5")
       print("Loaded model g2 from disk")
   def audio_evaluation(self, num_audios, files_permutation):
 
