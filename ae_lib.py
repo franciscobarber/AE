@@ -5,7 +5,8 @@ Created on Sat Jan 30 18:19:12 2021
 @author: barberot
 """
 
-
+from os import listdir
+from os.path import isfile, join
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -163,8 +164,6 @@ class myautoencoder():
       print("Loaded model g2 from disk")
   def audio_evaluation(self, num_audios, files_permutation):
 
-    audio_dir='/content/free-spoken-digit-dataset/recordings/'
-    file_names = [f for f in listdir(audio_dir) if isfile(join(audio_dir, f)) and '.wav' in f]
     sp_sz = int(self.time_long)
     loss1 = np.zeros(num_audios,)
     loss2 = np.zeros(num_audios,)
