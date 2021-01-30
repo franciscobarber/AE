@@ -170,9 +170,11 @@ class myautoencoder():
     loss2 = np.zeros(num_audios,)
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
-    total_specs=0     
+    total_specs=0 
+    file_names = [f for f in listdir(audio_dir) if isfile(join(audio_dir, f)) and '.wav' in f]
+    audio_dir='/content/free-spoken-digit-dataset/recordings/'
     for i in range(num_audios):
-      audio_dir='/content/free-spoken-digit-dataset/recordings/'
+      
       audio_path = audio_dir + file_names[files_permutation[i]]
       sample_rate, samples = wav.read(audio_path)
       samples = np.append(samples, np.random.randn(sp_sz-samples.shape[0]%sp_sz)*10, axis=0)
