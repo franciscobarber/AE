@@ -18,7 +18,6 @@ def create_specs(fft, time_long, step_size, log_ref, files_permutation):
   sp_sz = int(time_long)
   i = 0
   for file_name in file_names:
-    i += 1
     audio_path = audio_dir + file_name
 
     sample_rate, samples = wav.read(audio_path)
