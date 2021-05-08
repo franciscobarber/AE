@@ -34,7 +34,7 @@ def create_specs(fft, time_long, step_size, log_ref, files_permutation):
     else:
       train_list = np.append(train_list,ms2,axis=0)
     i += 1
-      return train_list, test_list
+    return train_list, test_list
 
 class specData():
   def __init__(self,fft,time_long,fft_step_size_ratio,clip=1e0):
