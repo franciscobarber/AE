@@ -17,6 +17,7 @@ def create_specs(fft, time_long, step_size, log_ref, files_permutation):
   #sp_sz=2046
   sp_sz = int(time_long)
   i = 0
+
   for file_name in file_names:
     audio_path = audio_dir + file_name
 
@@ -28,12 +29,12 @@ def create_specs(fft, time_long, step_size, log_ref, files_permutation):
                                             ref=log_ref), axis=0)
     lms = np.split(ms, n_ms, axis=2)
     ms2 = np.concatenate(lms)
-    if files_permutation[i]<np.ceil(len(file_names)*0.2):
-      test_list = np.append(test_list,ms2,axis=0)   
-    else:
+    if files_permutation[i]<np.ceil(len(file_names)*0.8):
       train_list = np.append(train_list,ms2,axis=0)
+    else:
+      test_list = np.append(test_list,ms2,axis=0)
     i += 1
-    return train_list, test_list
+  return train_list, test_list
 
 class specData():
   def __init__(self,fft,time_long,fft_step_size_ratio,clip=1e0):
