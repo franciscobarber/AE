@@ -75,6 +75,8 @@ class myautoencoder():
     if pretrain_encoder == True:
       self.layer.set_weights(self.encoder_w)
       self.layer.trainable = False
+    if random_encoder == True:
+      self.layer.trainable = False       
     # Instantiate Encoder Model
     encoder = Model(inputs, latent, name='encoder')
     #encoder.summary()
