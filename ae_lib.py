@@ -16,7 +16,7 @@ import librosa.display
 import scipy.io.wavfile as wav
 from os import listdir
 from os.path import isfile, join
-import keras
+from tensorflow import keras
 from keras.layers import Activation, Dense, Input, GaussianNoise
 from keras.layers import Conv2D, Flatten, BatchNormalization, Dropout
 from keras.layers import Reshape, Conv2DTranspose
