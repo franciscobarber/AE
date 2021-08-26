@@ -72,6 +72,8 @@ class myautoencoder():
 
     self.layer = Dense(latent_dim, name='latent_vector')
     latent = self.layer(x)
+    latent = K.cast(latent,"int32")
+    latent = K.cast(latent,"float32")
     if pretrain_encoder == True:
       self.layer.set_weights(self.encoder_w)
       self.layer.trainable = False
