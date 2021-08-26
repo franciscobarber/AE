@@ -45,8 +45,8 @@ class myautoencoder():
     self.compression_rate = compression_rate
     self.x_train = np.reshape(self.x_train, [-1, image_size[1], image_size[2], 1])
     self.x_test = np.reshape(self.x_test, [-1, image_size[1], image_size[2], 1])
-    self.x_train = self.x_train.astype('float32') / self.clip
-    self.x_test = self.x_test.astype('float32') / self.clip
+    self.x_train = self.x_train.astype('float16') / self.clip
+    self.x_test = self.x_test.astype('float16') / self.clip
     self.log_ref = log_ref
 
     # Network parameters
@@ -72,8 +72,6 @@ class myautoencoder():
 
     self.layer = Dense(latent_dim, name='latent_vector')
     latent = self.layer(x)
-    latent = K.cast(latent,"int32")
-    latent = K.cast(latent,"float32")
     if pretrain_encoder == True:
       self.layer.set_weights(self.encoder_w)
       self.layer.trainable = False
@@ -185,7 +183,7 @@ class myautoencoder():
       audio_path = audio_dir + file_names[files_permutation[i]]
       sample_rate, samples = wav.read(audio_path)
       samples = np.append(samples, np.random.randn(sp_sz-samples.shape[0]%sp_sz)*10, axis=0)
-      ms = lms = np.transpose(pretty_spectrogram(samples.astype("float32"),fft_size=self.fft,step_size=self.step_size,log=False))
+      ms = lms = np.transpose(pretty_spectrogram(samples.astype("float16"),fft_size=self.fft,step_size=self.step_size,log=False))
       ms=librosa.power_to_db(ms, ref=self.log_ref)
       n_ms = samples.shape[0]//sp_sz
       total_specs += n_ms
@@ -200,9 +198,9 @@ class myautoencoder():
       recovered_audio_recon2 = invert_pretty_spectrogram(
           comp3, fft_size=self.fft, step_size=self.step_size, log=False, n_iter=20
       )
-      b =  pretty_spectrogram(samples.astype("float32")
+      b =  pretty_spectrogram(samples.astype("float16")
           ,fft_size=self.fft,step_size=self.step_size,log=False)
-      c =  pretty_spectrogram(recovered_audio_recon2.astype("float32")
+      c =  pretty_spectrogram(recovered_audio_recon2.astype("float16")
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
@@ -228,7 +226,7 @@ class myautoencoder():
     audio_path='/content/free-spoken-digit-dataset/recordings/'+str(number)+per+str(repetition)+'.wav'
     sample_rate, samples = wav.read(audio_path)
     samples = np.append(samples, np.random.randn(sp_sz-samples.shape[0]%sp_sz)*10, axis=0)
-    ms = np.transpose(pretty_spectrogram(samples.astype("float32"),fft_size=self.fft,step_size=self.step_size,log=False))
+    ms = np.transpose(pretty_spectrogram(samples.astype("float16"),fft_size=self.fft,step_size=self.step_size,log=False))
     ms=librosa.power_to_db(ms,  ref=self.log_ref)
     n_ms = samples.shape[0]//sp_sz
     ms2 = np.expand_dims(ms, axis=0)
