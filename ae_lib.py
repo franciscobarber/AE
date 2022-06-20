@@ -206,11 +206,15 @@ class myautoencoder():
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
-      pesq_values[i] = pesq(sample_rate, samples, recovered_audio_recon2[0:samples.shape[0]], mode='nb')
+      try:
+        pesq_values[i] = pesq(sample_rate, samples, recovered_audio_recon2[0:samples.shape[0]], mode='nb')
+      except:
+        pesq_values[i] = np.nan
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
     loss2_tot = np.sum(loss2)/num_audios
-    pesq_results = np.sum(pesq_values)/num_audios
+    pesq_results = np.sum(pesq_values[~np.isnan(pesq_values)])/(num_audios- sum(np.isnan(pesq_values)))
+    print('nan',sum(np.isnan(pesq_values)))
     SNR_tot = np.sum(SNR)/num_audios 
     print('PESQ',pesq_results)
     print('LOSS',loss1_tot)
