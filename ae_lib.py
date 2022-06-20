@@ -15,6 +15,7 @@ import librosa
 import librosa.display 
 import scipy.io.wavfile as wav
 from os import listdir
+from pesq import pesq
 from os.path import isfile, join
 from tensorflow import keras
 from keras.layers import Activation, Dense, Input, GaussianNoise
@@ -173,6 +174,7 @@ class myautoencoder():
     sp_sz = int(self.time_long)
     loss1 = np.zeros(num_audios,)
     loss2 = np.zeros(num_audios,)
+    pesq_values = np.zeros(num_audios,)
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
     total_specs=0 
@@ -204,10 +206,13 @@ class myautoencoder():
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
+      pesq_values[i] = pesq(sample_rate, samples, recovered_audio_recon2[0:samples.shape[0]], mode='nb')
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
-    loss2_tot = np.sum(loss2)/num_audios 
-    SNR_tot = np.sum(SNR)/num_audios    
+    loss2_tot = np.sum(loss2)/num_audios
+    pesq_results = np.sum(pesq_values)/num_audios
+    SNR_tot = np.sum(SNR)/num_audios 
+    print('PESQ',pesq_results)
     print('LOSS',loss1_tot)
     print('LOSS2',loss2_tot)
     print('SNR', SNR_tot)
