@@ -82,13 +82,13 @@ class myautoencoder():
     # Build the Decoder Model
     latent_inputs = Input(shape=(latent_dim,), name='decoder_input')
     if self.mode == 'mlp':
-      x = Dense(500, activation="relu")(x) 
+      x = Dense(500, activation="relu")(latent_inputs) 
       #x = Dropout(0.2)(x)
       x = BatchNormalization()(x)
       x = Dense(500, activation="relu")(x) 
       #x = Dropout(0.2)(x)      
       x = BatchNormalization()(x) 
-    x = Dense(shape[1] * shape[2] * shape[3])(latent_inputs)
+    x = Dense(shape[1] * shape[2] * shape[3])(x)
     x = Reshape((shape[1], shape[2], shape[3]))(x)
     lp = x
     '''
