@@ -82,14 +82,16 @@ class myautoencoder():
     #encoder.summary()
     # Build the Decoder Model
     latent_inputs = Input(shape=(latent_dim,), name='decoder_input')
-    if self.mode == 'mlp':
-      x = Dense(500, activation="relu")(latent_inputs) 
-      #x = Dropout(0.2)(x)
-      x = BatchNormalization()(x)
-      x = Dense(500, activation="relu")(x) 
-      #x = Dropout(0.2)(x)      
-      x = BatchNormalization()(x) 
+
+    x = Dense(500, activation="relu")(latent_inputs) 
+    #x = Dropout(0.2)(x)
+    x = BatchNormalization()(x)
+    x = Dense(500, activation="relu")(x) 
+    #x = Dropout(0.2)(x)      
+    x = BatchNormalization()(x) 
+
     x = Dense(shape[1] * shape[2] * shape[3])(x)
+   
     x = Reshape((shape[1], shape[2], shape[3]))(x)
     lp = x
     '''
@@ -107,7 +109,7 @@ class myautoencoder():
     for filters in layer_filters[::-1]:
         x = Conv2DTranspose(filters=filters,
                             kernel_size=kernel_size,
-                            kernel_regularizer=regularizers.l2(0.001),
+                            kernel_regularizer=regularizers.l2(0.01),
                             strides=(1,1),
                             activation='relu',
                             padding='same')(x)
