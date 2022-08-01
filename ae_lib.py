@@ -18,6 +18,7 @@ from os import listdir
 from pesq import pesq
 from os.path import isfile, join
 from tensorflow import keras
+import tensorflow as tf
 from keras.layers import Activation, Dense, Input, GaussianNoise
 from keras.layers import Conv2D, Flatten, BatchNormalization, Dropout
 from keras.layers import Reshape, Conv2DTranspose
@@ -134,7 +135,7 @@ class myautoencoder():
     self.epochs = epochs
     self.loss = loss    
     #autoencoder.summary()
-    sgd = keras.optimizers.Adam(lr=0.0001, beta_1=0.95, beta_2=0.999, amsgrad=False)
+    sgd = tf.keras.optimizers.Adam(lr=0.0001, beta_1=0.95, beta_2=0.999, amsgrad=False)
     #sgd = keras.optimizers.RMSprop(lr=0.0001, rho=0.99)
     self.autoencoder.compile(loss=self.loss, optimizer=sgd)
 
