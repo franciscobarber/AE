@@ -208,7 +208,7 @@ class myautoencoder():
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
-      loss3[i]=scipy.stats.pearsonr(b, c).statistic
+      loss3[i]=scipy.stats.pearsonr(samples, recovered_audio_recon2[0:samples.shape[0]]).statistic
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
     loss2_tot = np.sum(loss2)/num_audios 
