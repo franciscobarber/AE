@@ -28,6 +28,7 @@ from keras import regularizers
 np.random.seed(1337)
 import time
 from keras.models import model_from_json
+import scipy
 
 class myautoencoder():
   def __init__(self,compression_rate,spec, x_train, x_test, mode = 'conv', random_encoder = False, pretrain_encoder = False, encoder_w=None, std = 0, log_ref=1e-5):
@@ -175,6 +176,7 @@ class myautoencoder():
     sp_sz = int(self.time_long)
     loss1 = np.zeros(num_audios,)
     loss2 = np.zeros(num_audios,)
+    loss3 = np.zeros(num_audios,)
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
     total_specs=0 
@@ -206,12 +208,15 @@ class myautoencoder():
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
+      loss3[i]=scipy.stats.pearsonr(b, c).statistic
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
     loss2_tot = np.sum(loss2)/num_audios 
+    loss3_tot = np.sum(loss3)/num_audios
     SNR_tot = np.sum(SNR)/num_audios    
     print('LOSS',loss1_tot)
     print('LOSS2',loss2_tot)
+    print('LOSS3',loss3_tot)
     print('SNR', SNR_tot)
     print(total_specs)    
     print( 'tiempo de reconstrucción: {}s'.  format(int(time.time()-t0)))   
