@@ -30,7 +30,7 @@ from keras import regularizers
 np.random.seed(1337)
 import time
 from keras.models import model_from_json
-
+import scipy
 class myautoencoder():
   def __init__(self,compression_rate,spec, x_train, x_test, mode = 'conv', random_encoder = False, pretrain_encoder = False, encoder_w=None, std = 0, log_ref=1e-5):
     self.mode = mode
@@ -208,7 +208,7 @@ class myautoencoder():
         ,fft_size=self.fft,step_size=self.step_size,log=False)
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
-      loss3[i]=scipy.stats.pearsonr(b, c, *, alternative='two-sided', method=None)
+      loss3[i]=scipy.stats.pearsonr(b, c).statistic
       try:
         pesq_values[i] = pesq(sample_rate, samples, recovered_audio_recon2[0:samples.shape[0]], mode='nb')
       except:
