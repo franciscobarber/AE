@@ -29,7 +29,8 @@ np.random.seed(1337)
 import time
 from keras.models import model_from_json
 import scipy
-
+import torch
+from torchmetrics.audio import PerceptualEvaluationSpeechQuality
 class myautoencoder():
   def __init__(self,compression_rate,spec, x_train, x_test, mode = 'conv', random_encoder = False, pretrain_encoder = False, encoder_w=None, std = 0, log_ref=1e-5):
     self.mode = mode
@@ -178,6 +179,7 @@ class myautoencoder():
     loss2 = np.zeros(num_audios,)
     loss3 = np.zeros(num_audios,)
     loss4 = []
+    pesq = []
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
     total_specs=0 
@@ -207,10 +209,19 @@ class myautoencoder():
           ,fft_size=self.fft,step_size=self.step_size,log=False)
       c =  pretty_spectrogram(recovered_audio_recon2.astype("float32")
         ,fft_size=self.fft,step_size=self.step_size,log=False)
+      g = torch.manual_seed(1)
+      preds = torch.from_numpy(recovered_audio_recon2)
+      target = torch.from_numpy(samples)
+      nb_pesq = PerceptualEvaluationSpeechQuality(sample_rate, 'nb')
+      try:
+        pesq_value = nb_pesq(preds, target).float()
+        pesq.append(pesq_value)
+      except:
+        pass
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
       loss3[i]=scipy.stats.pearsonr(b.reshape(-1),c.reshape(-1)).statistic
-      loss4[i]=scipy.stats.pearsonr(samples,recovered_audio_recon2[0:samples.shape[0]]).statistic
+      loss4.append(cipy.stats.pearsonr(samples,recovered_audio_recon2[0:samples.shape[0]]).statistic)
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
     loss2_tot = np.sum(loss2)/num_audios 
@@ -219,8 +230,9 @@ class myautoencoder():
     print('LOSS',loss1_tot)
     print('LOSS2',loss2_tot)
     print('PEARSON SPECTRAL',loss3_tot)
-    print('PEARSON',loss4_tot)
+    print('PEARSON',sum(loss4)/len(loss4))
     print('SNR', SNR_tot)
+    print('PESQ',sum(pesq)/len(pesq))
     print(total_specs)    
     print( 'tiempo de reconstrucción: {}s'.  format(int(time.time()-t0)))   
   def make_wav(self,number, person,repetition):
