@@ -177,6 +177,7 @@ class myautoencoder():
     loss1 = np.zeros(num_audios,)
     loss2 = np.zeros(num_audios,)
     loss3 = np.zeros(num_audios,)
+    loss4 = []
     SNR = np.zeros(num_audios,) 
     t0 = time.time()
     total_specs=0 
@@ -209,6 +210,7 @@ class myautoencoder():
       loss1[i]=np.linalg.norm(b-c)/np.linalg.norm(b)
       loss2[i]=np.linalg.norm(b-c)
       loss3[i]=scipy.stats.pearsonr(b.reshape(-1),c.reshape(-1)).statistic
+      loss4[i]=scipy.stats.pearsonr(samples,recovered_audio_recon2[0:samples.shape[0]]).statistic
       SNR[i]=np.linalg.norm(samples)/np.linalg.norm(recovered_audio_recon2[0:samples.shape[0]]-samples)
     loss1_tot = np.sum(loss1)/num_audios
     loss2_tot = np.sum(loss2)/num_audios 
@@ -216,7 +218,8 @@ class myautoencoder():
     SNR_tot = np.sum(SNR)/num_audios    
     print('LOSS',loss1_tot)
     print('LOSS2',loss2_tot)
-    print('LOSS3',loss3_tot)
+    print('PEARSON SPECTRAL',loss3_tot)
+    print('PEARSON',loss4_tot)
     print('SNR', SNR_tot)
     print(total_specs)    
     print( 'tiempo de reconstrucción: {}s'.  format(int(time.time()-t0)))   
