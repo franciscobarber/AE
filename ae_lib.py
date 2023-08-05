@@ -30,6 +30,7 @@ import time
 from keras.models import model_from_json
 import scipy
 import torch
+import torchmetrics
 from torchmetrics.audio import PerceptualEvaluationSpeechQuality
 class myautoencoder():
   def __init__(self,compression_rate,spec, x_train, x_test, mode = 'conv', random_encoder = False, pretrain_encoder = False, encoder_w=None, std = 0, log_ref=1e-5):
